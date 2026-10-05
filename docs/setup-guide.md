@@ -91,7 +91,9 @@ sudo ./scripts/setup.sh          # write down the dashboard password it prints
 Offline rule test:
 ```bash
 python3 scripts/make_test_pcap.py /tmp/attacks.pcap
+mkdir -p /tmp/ids-test
 sudo suricata -c /etc/suricata/suricata.yaml -r /tmp/attacks.pcap -l /tmp/ids-test -k none
+sudo chmod 644 /tmp/ids-test/eve.json
 python3 scripts/check_test_results.py /tmp/ids-test/eve.json
 ```
 **Check:** "Detected 12/12" and 0 false positives.
