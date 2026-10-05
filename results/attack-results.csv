@@ -24,7 +24,7 @@ T5,SSH brute force,2,,,,,,
 T5,SSH brute force,3,,,,,,
 T5,SSH brute force,4,,,,,,
 T5,SSH brute force,5,,,,,,
-T6,FTP brute force,1,,,,,,
+T6,FTP brute force,1,2026-10-05 22:46:45,yes,1000007(custom FTP);2002383(ET FTP),n/a,yes,"installed vsftpd on Pi; hydra -l sada -P 20-pw ftp://192.168.10.50 from Kali; detected by BOTH the custom rule 1000007 (watches 530 failed-login replies) and ET 2002383; HIGH email; 0 valid passwords"
 T6,FTP brute force,2,,,,,,
 T6,FTP brute force,3,,,,,,
 T6,FTP brute force,4,,,,,,
