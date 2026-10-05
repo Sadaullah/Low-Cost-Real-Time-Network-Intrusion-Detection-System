@@ -101,3 +101,25 @@ _(Add dates and screenshots for these if you have them.)_
 - docs/images/week3-testing/email-high-ssh-bruteforce.jpg, email-medium-rpc.jpg, email-low-icmp.jpg
 **Next:** T4 ICMP flood (hping3), T5 SSH brute force (hydra).
 **Hours:**
+
+## Day 2 – 2026-10-06  (who: Sada)
+
+**Goal:** Move the project from detection-only (IDS) to detection + prevention: add inline IPS mode, automatic IP blocking, and a proper performance benchmark.
+**Done:**
+- Added prevention (drop) rules in rules/ips.rules (SID 1000101-1000113): stealth scans, ICMP/SYN flood, SSH brute force, SQLi, XSS, EICAR
+- Added scripts/ips_mode.sh and scripts/ids_mode.sh to switch between inline IPS (Suricata -q 0 on NFQUEUE, eth0 only) and passive IDS; NFQUEUE scoped to eth0 with --queue-bypass so Wi-Fi management (RealVNC on wlan0) is never affected and traffic is never blackholed if Suricata stops
+- Added active-response daemon collector/ip_blocker.py + systemd/ids-blocker.service: bans an attacker IP with iptables after 5 alerts in 30 s, auto-unbans after 10 min, logs bans to the SQLite "blocks" table; whitelist protects the admin laptop, Wi-Fi network and localhost
+- Added config BLOCK_* settings (config/config.env.example)
+- Added scripts/perf_benchmark.sh (averages CPU/RAM/temp + computes packet-drop % per scenario) and scripts/perf_report.py (builds the performance table and chart)
+- Generated the performance chart docs/images/week4-results/fig_performance.png and results/performance-table.md
+- Documented everything in docs/ips-mode.md and docs/performance.md
+**Problems & fixes:**
+- NFQUEUE must not catch management traffic -> scoped iptables NFQUEUE to eth0 only, whitelisted the Wi-Fi/management network in the blocker
+- Risk of blackhole if inline Suricata dies -> used --queue-bypass
+- Inline IPS and the auto-blocker overlap (IPS drops packets before the blocker reaches its threshold) -> demo them separately, documented in docs/ips-mode.md
+**Evidence (to capture when run on the Pi):**
+- IPS before/after per attack (attack succeeds in IDS mode, is blocked in IPS mode) -> docs/images/week4-results/
+- journalctl -u ids-blocker showing "BLOCKED <ip>" + iptables -L FYP-BLOCK
+- docs/images/week4-results/fig_performance.png (after running the 3 benchmark scenarios)
+**Next:** deploy on the Pi, capture IPS/auto-block/performance evidence, update Chapter 6 (future work -> implemented).
+**Hours:**

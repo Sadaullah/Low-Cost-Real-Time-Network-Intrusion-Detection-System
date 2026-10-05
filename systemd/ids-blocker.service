@@ -1,0 +1,22 @@
+[Unit]
+Description=FYP-IDS active response (auto-block attacker IPs via iptables)
+After=network-online.target suricata.service ids-collector.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/fyp-ids/collector/ip_blocker.py
+# On stop, clear the ban chain so no attacker stays blocked by a dead service
+ExecStopPost=/sbin/iptables -F FYP-BLOCK
+Restart=always
+RestartSec=5
+# needs root + CAP_NET_ADMIN to edit iptables; reads eve.json (root-only)
+User=root
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/fyp-ids
+
+[Install]
+WantedBy=multi-user.target

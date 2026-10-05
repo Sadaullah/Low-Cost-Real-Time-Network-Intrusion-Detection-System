@@ -1,0 +1,47 @@
+# =====================================================================
+#  FYP-IPS drop rules  (Raspberry Pi Network IPS - BS Cyber Security)
+#  File: /etc/suricata/rules/ips.rules
+#
+#  These are the DROP (prevention) versions of our detection rules.
+#  They are ONLY loaded when Suricata runs INLINE (IPS mode, NFQUEUE),
+#  started by scripts/ips_mode.sh. In normal passive IDS mode these
+#  rules are NOT loaded, so the sensor only alerts.
+#
+#  How IPS mode works in our lab:
+#    - The attack targets (SSH, FTP, DVWA/HTTP, ICMP) run ON the Pi.
+#    - scripts/ips_mode.sh sends eth0 traffic through NFQUEUE, and
+#      Suricata (-q 0) inspects each packet BEFORE the kernel delivers it.
+#    - A matching "drop" rule makes Suricata discard the packet, so the
+#      attack never reaches the service => the attack is PREVENTED.
+#
+#  SID range 1000101-1000199 is reserved for our IPS drop rules, kept
+#  separate from the 1000001-1000099 alert rules so results stay clear.
+# =====================================================================
+
+# ---------- Reconnaissance: drop stealth-scan probes ------------------
+drop tcp any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED Nmap XMAS scan (FIN+PSH+URG)"; flow:stateless; flags:FPU,12; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000102; rev:1;)
+drop tcp any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED Nmap NULL scan (no TCP flags)"; flow:stateless; flags:0; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000103; rev:1;)
+drop tcp any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED Nmap FIN scan (FIN without ACK)"; flow:stateless; flags:F,12; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000104; rev:1;)
+
+# ---------- Denial of Service: drop flood packets ---------------------
+# ICMP flood: once a source crosses the rate, drop its echo requests.
+drop icmp any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED ICMP flood"; itype:8; threshold:type both, track by_src, count 200, seconds 2; classtype:attempted-dos; sid:1000105; rev:1;)
+
+# SYN flood: drop excess SYNs from a single source to one host.
+drop tcp any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED TCP SYN flood"; flow:stateless; flags:S,12; threshold:type both, track by_src, count 2000, seconds 2; classtype:attempted-dos; sid:1000108; rev:1;)
+
+# ---------- Brute force: drop the attacking connections ---------------
+# SSH brute force: after 10 new SSH connections in 60 s, drop further SYNs
+# from that source to port 22 (the login flood is cut off).
+drop tcp any any -> $HOME_NET 22 (msg:"FYP-IPS BLOCKED SSH brute force"; flow:to_server; flags:S,12; threshold:type both, track by_src, count 10, seconds 60; classtype:attempted-admin; sid:1000106; rev:1;)
+
+# ---------- Web attacks: drop the malicious HTTP request --------------
+# SQL injection in the URL -> request is dropped before it reaches DVWA.
+drop http any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED SQL injection (UNION SELECT)"; flow:established,to_server; http.uri; content:"union"; nocase; content:"select"; nocase; distance:0; classtype:web-application-attack; sid:1000110; rev:1;)
+drop http any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED SQL injection (OR 1=1)"; flow:established,to_server; http.uri; pcre:"/(%27|')\s*or\s*['\"]?\d+['\"]?\s*=\s*['\"]?\d+/i"; classtype:web-application-attack; sid:1000113; rev:1;)
+# Cross-site scripting attempt in the URL -> request dropped.
+drop http any any -> $HOME_NET any (msg:"FYP-IPS BLOCKED XSS attempt (<script>)"; flow:established,to_server; http.uri; content:"<script"; nocase; classtype:web-application-attack; sid:1000111; rev:1;)
+
+# ---------- Malware: block the download ------------------------------
+# EICAR test file over HTTP -> drop so the "malware" never completes.
+drop http any any -> any any (msg:"FYP-IPS BLOCKED EICAR test file over HTTP"; flow:established,to_client; file.data; content:"EICAR-STANDARD-ANTIVIRUS-TEST-FILE"; classtype:trojan-activity; sid:1000109; rev:1;)
