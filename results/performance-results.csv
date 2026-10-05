@@ -1,3 +1,4 @@
 condition,throughput_mbit_s,cpu_percent,ram_mb,temp_c,packet_drop_percent,notes
-Suricata idle (ET Open + custom),n/a,,1700,44.3,0.00,"normal traffic and scans: 0% packet drop; load average 0.17"
-Under attack flood (T4 ICMP + T7 SYN),n/a,20.0,1700,45.3,20.50,"774586 packets seen (406k SYN + 485k ICMP); attacks still detected because flood volume >> alert threshold"
+"Suricata idle",n/a,2.0,1878,41.6,0.00,"background traffic only; 0 packets dropped"
+"Normal load (iperf3)",94,21.6,1757,48.5,0.70,"509468 pkts in 60s (~8491 pps); TCP ~94 Mbit/s; 3567 dropped"
+"Under attack flood",n/a,17.8,1691,47.7,4.79,"3447129 pkts in 60s (~57452 pps) ICMP flood; attack still detected; 164966 dropped"

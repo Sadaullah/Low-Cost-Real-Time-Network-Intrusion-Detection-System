@@ -1,4 +1,5 @@
 | Condition | CPU (%) | RAM (MB) | Temp (°C) | Packet drop (%) |
 |---|---|---|---|---|
-| Suricata idle (ET Open + custom) | - | 1700 | 44.3 | 0.00 |
-| Under attack flood (T4 ICMP + T7 SYN) | 20.0 | 1700 | 45.3 | 20.50 |
+| Suricata idle | 2.0 | 1878 | 41.6 | 0.00 |
+| Normal load (iperf3) | 21.6 | 1757 | 48.5 | 0.70 |
+| Under attack flood | 17.8 | 1691 | 47.7 | 4.79 |

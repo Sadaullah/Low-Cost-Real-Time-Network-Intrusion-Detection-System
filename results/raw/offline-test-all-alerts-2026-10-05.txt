@@ -1,0 +1,23 @@
+    203 9000002  NMAP SYN Scan Detected
+    101 9000003  NMAP Port Scan Detected
+     50 9000004  NMAP Service Scan Detected
+      5 1000001  FYP-IDS SCAN Possible TCP SYN port scan
+      3 2003068  ET SCAN Potential SSH Scan OUTBOUND
+      2 9000001  TEST ICMP Detected
+      2 1000008  FYP-IDS DOS Possible TCP SYN flood
+      1 2010963  ET WEB_SERVER SELECT USER SQL Injection Attempt in URI
+      1 2009714  ET WEB_SERVER Script tag in URI Possible Cross Site Scripting Attempt
+      1 2006546  ET SCAN LibSSH Based Frequent SSH Connections Likely BruteForce Attack
+      1 2002383  ET SCAN Potential FTP Brute-Force attempt response
+      1 2001219  ET SCAN Potential SSH Scan
+      1 1000013  FYP-IDS WEB Possible SQL injection (OR 1=1)
+      1 1000012  FYP-IDS POLICY Telnet connection attempt
+      1 1000011  FYP-IDS WEB Possible XSS attempt (<script>)
+      1 1000010  FYP-IDS WEB Possible SQL injection (UNION SELECT)
+      1 1000009  FYP-IDS MALWARE EICAR test file transferred over HTTP
+      1 1000007  FYP-IDS BRUTEFORCE Possible FTP brute force (failed logins)
+      1 1000006  FYP-IDS BRUTEFORCE Possible SSH brute force
+      1 1000005  FYP-IDS DOS Possible ICMP flood
+      1 1000004  FYP-IDS SCAN Nmap FIN scan (FIN without ACK)
+      1 1000003  FYP-IDS SCAN Nmap NULL scan (no TCP flags)
+      1 1000002  FYP-IDS SCAN Nmap XMAS scan (FIN+PSH+URG)

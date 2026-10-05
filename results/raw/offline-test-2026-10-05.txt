@@ -1,0 +1,18 @@
+Test case                    SIDs                 Alerts  Result
+------------------------------------------------------------------
+T1 SYN port scan             1000001                   5  PASS
+T2 XMAS scan                 1000002                   1  PASS
+T2 NULL scan                 1000003                   1  PASS
+T2 FIN scan                  1000004                   1  PASS
+T4 ICMP flood                1000005                   1  PASS
+T5 SSH brute force           1000006                   1  PASS
+T6 FTP brute force           1000007                   1  PASS
+T7 SYN flood                 1000008                   2  PASS
+T8 SQL injection             1000010,1000013           2  PASS
+T8 XSS                       1000011                   1  PASS
+T9 EICAR malware test        1000009                   1  PASS
+Telnet policy                1000012                   1  PASS
+------------------------------------------------------------------
+Detected 12/12 test cases (100% detection rate)
+Custom-rule alerts on benign client traffic (false positives): 0
+Other (ET Open) rules that fired: 10 SIDs, 364 alerts
