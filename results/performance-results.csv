@@ -1,5 +1,5 @@
 condition,throughput_mbit_s,cpu_percent,ram_mb,temp_c,packet_drop_percent,notes
 Bridge only - Suricata stopped,,,,,,
-Suricata ET Open + custom - idle,,,,,,
+Suricata ET Open + custom - idle,n/a,0.17 load,~1700,44.3,0,"normal traffic and scans: 0 % packet drop"
 Suricata ET Open + custom - iperf3 load,,,,,,
-Suricata during SYN flood (T7),,,,,,
+Suricata during SYN flood (T7),n/a (flood not throughput),~20 (brief),~1700,45.3,20.5,"cumulative after T4 ICMP flood (485k pkts) + T7 SYN flood (406k pkts); 774586 packets seen; attacks still detected because flood volume >> alert threshold"
