@@ -34,7 +34,7 @@ T7,SYN flood,2,,,,,,
 T7,SYN flood,3,,,,,,
 T7,SYN flood,4,,,,,,
 T7,SYN flood,5,,,,,,
-T8,Web attacks (SQLi/XSS/Nikto),1,,,,,,
+T8,Web attacks (SQLi/XSS/Nikto),1,2026-10-05 23:10,yes,1000010(SQLi UNION x6);1000011(XSS x271);~30 ET WEB rules,n/a,yes,"installed DVWA on Pi (Apache+PHP+MariaDB); from Kali: SQLi (UNION + OR 1=1) + XSS via curl + nikto scan (8064 requests). Both custom rules 1000010 & 1000011 fired and emailed; nikto triggered ~30 ET WEB_SERVER/EXPLOIT rules. 0 % false negatives"
 T8,Web attacks (SQLi/XSS/Nikto),2,,,,,,
 T8,Web attacks (SQLi/XSS/Nikto),3,,,,,,
 T8,Web attacks (SQLi/XSS/Nikto),4,,,,,,
