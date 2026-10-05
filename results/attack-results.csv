@@ -19,7 +19,7 @@ T4,ICMP flood,2,,,,,,
 T4,ICMP flood,3,,,,,,
 T4,ICMP flood,4,,,,,,
 T4,ICMP flood,5,,,,,,
-T5,SSH brute force,1,,,,,,
+T5,SSH brute force,1,2026-10-05 20:47:24,yes,2006546(ET LibSSH BruteForce);2001219;2003068,n/a,yes,"hydra -l sada -P 20-pw list ssh://192.168.10.50 from Kali; 20 login tries; detected by ET SSH brute-force rules; HIGH email; 0 valid passwords (Pi password held). Note: custom 1000006 did not fire (hydra uses libssh = reused connections, under the 10-conn/60s threshold) - ET rule caught it"
 T5,SSH brute force,2,,,,,,
 T5,SSH brute force,3,,,,,,
 T5,SSH brute force,4,,,,,,
