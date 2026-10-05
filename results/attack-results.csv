@@ -1,5 +1,5 @@
 test_id,attack,run,date_time,detected_yes_no,rule_sid,alert_delay_seconds,telegram_received_yes_no,notes
-T1,TCP SYN port scan,1,,,,,,
+T1,TCP SYN port scan,1,2026-10-05 17:59:53,yes,1000001;9000002;9000003;9000004 (+1000008),see DB query,yes,"nmap -sS -p 1-1000 192.168.10.50 from laptop 192.168.10.1; 1000 ports in 1.52 s; SYN-flood rule 1000008 also fired (scan/flood overlap); team rules 9000002-4 alerted per packet (alert flood)"
 T1,TCP SYN port scan,2,,,,,,
 T1,TCP SYN port scan,3,,,,,,
 T1,TCP SYN port scan,4,,,,,,
