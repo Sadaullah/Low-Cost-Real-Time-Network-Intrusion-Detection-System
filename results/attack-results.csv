@@ -39,7 +39,7 @@ T8,Web attacks (SQLi/XSS/Nikto),2,,,,,,
 T8,Web attacks (SQLi/XSS/Nikto),3,,,,,,
 T8,Web attacks (SQLi/XSS/Nikto),4,,,,,,
 T8,Web attacks (SQLi/XSS/Nikto),5,,,,,,
-T9,EICAR malware download,1,,,,,,
+T9,EICAR malware download,1,2026-10-05 23:17:44,yes,1000009(EICAR malware),n/a,yes,"EICAR test file served from Kali (python http.server 8000); downloaded to Pi over HTTP; custom rule 1000009 matched the EICAR payload in the file content (classtype: A Network Trojan was detected). Content-inspection rule, not header-based"
 T9,EICAR malware download,2,,,,,,
 T9,EICAR malware download,3,,,,,,
 T9,EICAR malware download,4,,,,,,
