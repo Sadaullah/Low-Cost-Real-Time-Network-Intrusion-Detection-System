@@ -14,7 +14,7 @@ T3,Aggressive scan + OS detection,2,,,,,,
 T3,Aggressive scan + OS detection,3,,,,,,
 T3,Aggressive scan + OS detection,4,,,,,,
 T3,Aggressive scan + OS detection,5,,,,,,
-T4,ICMP flood,1,,,,,,
+T4,ICMP flood,1,2026-10-05 20:39:37,yes,1000005,7.92,yes,"sudo timeout 10 hping3 -1 --flood from Kali 192.168.10.20; 484925 ICMP packets in 10 s; detected, 1 alert per 2 s window (threshold working), emailed"
 T4,ICMP flood,2,,,,,,
 T4,ICMP flood,3,,,,,,
 T4,ICMP flood,4,,,,,,
