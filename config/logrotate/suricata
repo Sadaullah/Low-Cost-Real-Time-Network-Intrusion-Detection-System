@@ -1,0 +1,13 @@
+# /etc/logrotate.d/suricata - keeps Suricata logs from filling the 32 GB SD card
+/var/log/suricata/*.log /var/log/suricata/*.json {
+    daily
+    maxsize 200M
+    rotate 7
+    compress
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+        systemctl kill -s HUP suricata
+    endscript
+}

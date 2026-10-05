@@ -1,0 +1,14 @@
+[Unit]
+Description=Disable NIC offloading so Suricata sees real packets
+After=network-online.target
+Before=suricata.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# Interfaces that do not exist are ignored ("-" prefix)
+ExecStart=-/usr/sbin/ethtool -K eth0 gro off lro off
+ExecStart=-/usr/sbin/ethtool -K eth1 gro off lro off
+
+[Install]
+WantedBy=multi-user.target

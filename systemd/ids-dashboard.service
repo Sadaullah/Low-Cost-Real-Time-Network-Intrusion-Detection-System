@@ -1,0 +1,20 @@
+[Unit]
+Description=FYP-IDS web dashboard (Flask, port 8080)
+After=network-online.target ids-collector.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/fyp-ids/dashboard
+ExecStart=/usr/bin/python3 /opt/fyp-ids/dashboard/app.py
+Restart=always
+RestartSec=5
+User=fyp-ids
+Group=fyp-ids
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/fyp-ids
+
+[Install]
+WantedBy=multi-user.target

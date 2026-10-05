@@ -1,0 +1,48 @@
+# =====================================================================
+#  FYP-IDS custom rules  (Raspberry Pi Network IDS - BS Cyber Security)
+#  File: /etc/suricata/rules/local.rules
+#  SID range 1000001-1000099 is reserved for local rules.
+#  Tune the "count" / "seconds" values in Week 2 and record each change
+#  in your report (this tuning is part of your own contribution).
+# =====================================================================
+
+# ---------- Reconnaissance (scanning) ---------------------------------
+
+# T1: TCP SYN port scan - many bare SYN packets from one source in 5 s
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS SCAN Possible TCP SYN port scan"; flow:stateless; flags:S,12; threshold:type both, track by_src, count 30, seconds 5; classtype:attempted-recon; sid:1000001; rev:1;)
+
+# T2: Stealth scans - flag combinations that normal TCP never sends
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS SCAN Nmap XMAS scan (FIN+PSH+URG)"; flow:stateless; flags:FPU,12; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000002; rev:1;)
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS SCAN Nmap NULL scan (no TCP flags)"; flow:stateless; flags:0; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000003; rev:1;)
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS SCAN Nmap FIN scan (FIN without ACK)"; flow:stateless; flags:F,12; threshold:type both, track by_src, count 5, seconds 10; classtype:attempted-recon; sid:1000004; rev:1;)
+
+# ---------- Denial of Service -----------------------------------------
+
+# T4: ICMP flood - more than 200 echo requests to one host in 2 s
+alert icmp any any -> $HOME_NET any (msg:"FYP-IDS DOS Possible ICMP flood"; itype:8; threshold:type both, track by_dst, count 200, seconds 2; classtype:attempted-dos; sid:1000005; rev:1;)
+
+# T7: SYN flood - more than 500 SYNs to one host in 2 s
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS DOS Possible TCP SYN flood"; flow:stateless; flags:S,12; threshold:type both, track by_dst, count 500, seconds 2; classtype:attempted-dos; sid:1000008; rev:1;)
+
+# ---------- Brute force ------------------------------------------------
+
+# T5: SSH brute force - more than 10 new SSH connections from one source in 60 s
+alert tcp any any -> $HOME_NET 22 (msg:"FYP-IDS BRUTEFORCE Possible SSH brute force"; flow:to_server; flags:S,12; threshold:type both, track by_src, count 10, seconds 60; classtype:attempted-admin; sid:1000006; rev:1;)
+
+# T6: FTP brute force - server replies "530 Login incorrect" 5+ times to one client in 60 s
+alert tcp $HOME_NET 21 -> any any (msg:"FYP-IDS BRUTEFORCE Possible FTP brute force (failed logins)"; flow:from_server,established; content:"530 "; depth:4; threshold:type both, track by_dst, count 5, seconds 60; classtype:attempted-admin; sid:1000007; rev:1;)
+
+# Telnet should never be used on a modern network
+alert tcp any any -> $HOME_NET 23 (msg:"FYP-IDS POLICY Telnet connection attempt"; flow:to_server,established; threshold:type limit, track by_src, count 1, seconds 300; classtype:policy-violation; sid:1000012; rev:1;)
+
+# ---------- Malware / web attacks --------------------------------------
+
+# T9: EICAR anti-virus test file downloaded over HTTP (safe "malware" test)
+alert http any any -> any any (msg:"FYP-IDS MALWARE EICAR test file transferred over HTTP"; flow:established,to_client; file.data; content:"EICAR-STANDARD-ANTIVIRUS-TEST-FILE"; classtype:trojan-activity; sid:1000009; rev:1;)
+
+# T8: SQL injection keywords in the URL (decoded)
+alert http any any -> $HOME_NET any (msg:"FYP-IDS WEB Possible SQL injection (UNION SELECT)"; flow:established,to_server; http.uri; content:"union"; nocase; content:"select"; nocase; distance:0; classtype:web-application-attack; sid:1000010; rev:1;)
+alert http any any -> $HOME_NET any (msg:"FYP-IDS WEB Possible SQL injection (OR 1=1)"; flow:established,to_server; http.uri; pcre:"/(%27|')\s*or\s*['\"]?\d+['\"]?\s*=\s*['\"]?\d+/i"; classtype:web-application-attack; sid:1000013; rev:1;)
+
+# T8: Cross-site scripting attempt in the URL
+alert http any any -> $HOME_NET any (msg:"FYP-IDS WEB Possible XSS attempt (<script>)"; flow:established,to_server; http.uri; content:"<script"; nocase; classtype:web-application-attack; sid:1000011; rev:1;)

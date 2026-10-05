@@ -1,0 +1,5 @@
+condition,throughput_mbit_s,cpu_percent,ram_mb,temp_c,packet_drop_percent,notes
+Bridge only - Suricata stopped,,,,,,
+Suricata ET Open + custom - idle,,,,,,
+Suricata ET Open + custom - iperf3 load,,,,,,
+Suricata during SYN flood (T7),,,,,,

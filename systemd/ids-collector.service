@@ -1,0 +1,20 @@
+[Unit]
+Description=FYP-IDS alert collector (eve.json -> SQLite + Telegram/e-mail)
+After=network-online.target suricata.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/fyp-ids/collector/ids_collector.py
+Restart=always
+RestartSec=5
+# eve.json is readable by root only on most installs
+User=root
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/fyp-ids
+
+[Install]
+WantedBy=multi-user.target

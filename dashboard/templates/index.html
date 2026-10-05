@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetGuard Pi Dashboard · {{ sensor }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+<header>
+  <div>
+    <h1>NetGuard Pi · Network IDS</h1>
+    <p class="sub">Sensor <b>{{ sensor }}</b> · Suricata · live view, refreshes every 5 s</p>
+  </div>
+  <div class="hdr-right">
+    <span id="engine" class="pill">engine: …</span>
+    <select id="range" aria-label="Time range">
+      <option value="1">Last 1 hour</option>
+      <option value="24" selected>Last 24 hours</option>
+      <option value="168">Last 7 days</option>
+    </select>
+    <a class="btn" href="/export.csv">Export CSV</a>
+  </div>
+</header>
+
+<main>
+  <section class="kpis">
+    <div class="kpi"><span class="lbl">Total alerts</span><span id="k-total" class="val">–</span></div>
+    <div class="kpi high"><span class="lbl">High</span><span id="k-high" class="val">–</span></div>
+    <div class="kpi med"><span class="lbl">Medium</span><span id="k-med" class="val">–</span></div>
+    <div class="kpi low"><span class="lbl">Low</span><span id="k-low" class="val">–</span></div>
+    <div class="kpi"><span class="lbl">Unique attackers</span><span id="k-att" class="val">–</span></div>
+    <div class="kpi"><span class="lbl">Avg alert delay</span><span id="k-delay" class="val">–</span></div>
+  </section>
+
+  <section class="card wide">
+    <h2>Alerts per minute <span class="muted">(last 60 minutes)</span></h2>
+    <svg id="timeline" viewBox="0 0 900 160" preserveAspectRatio="none" role="img" aria-label="Alerts per minute"></svg>
+  </section>
+
+  <section class="grid3">
+    <div class="card"><h2>Top attackers</h2><div id="top-src" class="bars"></div></div>
+    <div class="card"><h2>Top rules fired</h2><div id="top-sig" class="bars"></div></div>
+    <div class="card"><h2>Most targeted</h2><div id="top-dst" class="bars"></div></div>
+  </section>
+
+  <section class="card wide">
+    <h2>Sensor health</h2>
+    <div class="health">
+      <div><span class="lbl">CPU temp</span><span id="h-temp">–</span></div>
+      <div><span class="lbl">Load (1/5/15 min)</span><span id="h-load">–</span></div>
+      <div><span class="lbl">RAM used</span><span id="h-mem">–</span></div>
+      <div><span class="lbl">SD card used</span><span id="h-disk">–</span></div>
+      <div><span class="lbl">Packets seen</span><span id="h-pkts">–</span></div>
+      <div><span class="lbl">Packet drop</span><span id="h-drop">–</span></div>
+    </div>
+  </section>
+
+  <section class="card wide">
+    <h2>Latest alerts</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Time</th><th>Sev</th><th>Signature</th><th>Source</th><th>Destination</th><th>Proto</th><th>SID</th><th>Notified</th></tr></thead>
+        <tbody id="alerts"><tr><td colspan="8" class="muted">Waiting for alerts…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<footer>BS Cyber Security Final Year Project · Low-cost real-time NIDS on Raspberry Pi 4</footer>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
