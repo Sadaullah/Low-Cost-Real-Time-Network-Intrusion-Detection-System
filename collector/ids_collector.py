@@ -153,16 +153,72 @@ class Notifier(threading.Thread):
                                     (round(delay, 3), row_id))
                 log.info("notified sid=%s delay=%.2fs", ev["alert"]["signature_id"], delay)
 
-    def format(self, ev):
+    SEV_NAME = {1: "HIGH", 2: "MEDIUM", 3: "LOW"}
+    SEV_COLOR = {1: "#d93025", 2: "#f29900", 3: "#1a73e8"}  # red / amber / blue
+
+    def fields(self, ev):
         a = ev["alert"]
-        sev = {1: "HIGH", 2: "MEDIUM", 3: "LOW"}.get(a.get("severity"), "INFO")
-        src = f"{ev.get('src_ip')}:{ev.get('src_port', '')}".rstrip(":")
-        dst = f"{ev.get('dest_ip')}:{ev.get('dest_port', '')}".rstrip(":")
-        return (f"🚨 [{self.cfg['SENSOR_NAME']}] {sev} severity alert\n"
-                f"{a.get('signature')}\n"
-                f"Attacker: {src}\nTarget:   {dst} ({ev.get('proto')})\n"
-                f"Category: {a.get('category')}\nRule SID: {a.get('signature_id')}\n"
-                f"Time: {ev.get('timestamp', '')[:19].replace('T', ' ')}")
+        sev = a.get("severity", 3)
+        return {
+            "sev": self.SEV_NAME.get(sev, "INFO"),
+            "color": self.SEV_COLOR.get(sev, "#5f6368"),
+            "sig": a.get("signature", "Alert"),
+            "src": f"{ev.get('src_ip')}:{ev.get('src_port', '')}".rstrip(":"),
+            "dst": f"{ev.get('dest_ip')}:{ev.get('dest_port', '')}".rstrip(":"),
+            "proto": ev.get("proto", ""),
+            "cat": a.get("category") or "-",
+            "sid": a.get("signature_id"),
+            "time": ev.get("timestamp", "")[:19].replace("T", " "),
+            "sensor": self.cfg["SENSOR_NAME"],
+        }
+
+    def format(self, ev):
+        """Plain-text body (Telegram, and the text part of the e-mail)."""
+        f = self.fields(ev)
+        return (f"[{f['sensor']}] {f['sev']} severity alert\n"
+                f"{f['sig']}\n\n"
+                f"Attacker : {f['src']}\n"
+                f"Target   : {f['dst']} ({f['proto']})\n"
+                f"Category : {f['cat']}\n"
+                f"Rule SID : {f['sid']}\n"
+                f"Time     : {f['time']}\n")
+
+    def format_html(self, ev):
+        """Professional HTML e-mail body."""
+        f = self.fields(ev)
+
+        def esc(x):
+            return (str(x).replace("&", "&amp;").replace("<", "&lt;")
+                    .replace(">", "&gt;"))
+
+        row = ("<tr><td style='padding:6px 14px;color:#5f6368;font-size:13px;"
+               "white-space:nowrap'>{k}</td><td style='padding:6px 14px;"
+               "color:#202124;font-size:14px;font-weight:600'>{v}</td></tr>")
+        rows = "".join(row.format(k=k, v=esc(v)) for k, v in [
+            ("Attacker", f["src"]), ("Target", f"{f['dst']} ({f['proto']})"),
+            ("Category", f["cat"]), ("Rule SID", f["sid"]), ("Detected at", f["time"]),
+        ])
+        return f"""\
+<!doctype html><html><body style="margin:0;background:#f1f3f4;
+ font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif">
+ <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+  style="background:#f1f3f4;padding:24px 12px"><tr><td align="center">
+  <table role="presentation" width="520" cellpadding="0" cellspacing="0"
+   style="max-width:520px;width:100%;background:#fff;border-radius:12px;
+   overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.12)">
+   <tr><td style="background:{f['color']};padding:18px 24px">
+    <div style="color:#fff;font-size:12px;letter-spacing:1px;opacity:.85">
+     NETGUARD PI · {esc(f['sev'])} SEVERITY</div>
+    <div style="color:#fff;font-size:20px;font-weight:700;margin-top:4px">
+     {esc(f['sig'])}</div></td></tr>
+   <tr><td style="padding:16px 10px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+     {rows}</table></td></tr>
+   <tr><td style="padding:14px 24px;border-top:1px solid #eee;
+    color:#80868b;font-size:12px;line-height:1.5">
+    Sensor <b>{esc(f['sensor'])}</b> · Suricata IDS on Raspberry Pi 4<br>
+    Automated alert — BS Cyber Security Final Year Project</td></tr>
+  </table></td></tr></table></body></html>"""
 
     def send_telegram(self, text):
         url = f"https://api.telegram.org/bot{self.cfg['TELEGRAM_BOT_TOKEN']}/sendMessage"
@@ -175,11 +231,13 @@ class Notifier(threading.Thread):
             return False
 
     def send_email(self, ev, text):
+        f = self.fields(ev)
         msg = EmailMessage()
-        msg["Subject"] = f"[FYP-IDS] {ev['alert'].get('signature')}"
-        msg["From"] = self.cfg["SMTP_USER"]
+        msg["Subject"] = f"[NetGuard Pi] {f['sev']}: {f['sig']}"
+        msg["From"] = f"NetGuard Pi IDS <{self.cfg['SMTP_USER']}>"
         msg["To"] = self.cfg["EMAIL_TO"]
-        msg.set_content(text)
+        msg.set_content(text)                         # plain-text fallback
+        msg.add_alternative(self.format_html(ev), subtype="html")
         try:
             with smtplib.SMTP(self.cfg["SMTP_HOST"], int(self.cfg["SMTP_PORT"]), timeout=15) as s:
                 s.starttls()
