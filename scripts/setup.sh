@@ -40,7 +40,7 @@ sleep 2
 systemctl enable --now ids-dashboard.service
 
 echo "[6/6] Test rules and restart Suricata"
-suricata -T -c /etc/suricata/suricata.yaml -q && systemctl restart suricata
+suricata -T -c /etc/suricata/suricata.yaml >/dev/null && systemctl restart suricata
 IP=$(hostname -I | awk '{print $1}')
 echo
 echo "Done. Dashboard: http://$IP:8080"
