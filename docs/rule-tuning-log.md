@@ -10,6 +10,7 @@ threshold) is recorded here. This table goes straight into Chapter 5
 | 2026-10-05 | 9000001 | rev 1 `alert icmp any any -> any any` -> rev 2 `alert icmp any any -> $HOME_NET any; itype:8; threshold limit 1/60s by_src` | 23 alerts in ~20 min from IPv6 neighbour discovery (fe80:: -> ff02::1:ff00:1), normal traffic | Only real pings alert, max 1/min per source; first live ping detected and e-mailed |
 | 2026-10-05 | 9000002, 9000003, 9000004, 9000005 | rev 1 `threshold: type threshold` -> rev 2 `threshold: type both` | T1 run 1: one Nmap scan produced dozens of identical alerts (alert flood) | T1 runs 2-5: exactly 1 alert per rule per scan, detection still 100 % |
 | 2026-10-05 | 1000008 | rev 1 `count 500, seconds 2` -> rev 2 `count 2000, seconds 2` | T1 run 1: a 1000-port Nmap scan (~1000 SYNs in 1.5 s) was also reported as a SYN flood | T1 runs 2-5: no false DoS alert; to re-check with real flood test T7 |
+| 2026-10-05 | 2233001 (ET/Suricata RFB app-layer) | Added suppress in /etc/suricata/threshold.config: `suppress gen_id 1, sig_id 2233001, track by_either, ip fe80::342c:7d12:feae:49be` (admin laptop only) | "SURICATA RFB Unimplemented security type" fired on the admin's own RealVNC Viewer session (laptop -> Pi:5900 over IPv6) | Admin VNC sessions no longer alert; RFB anomalies from any other host still detected |
 | | | | | |
 
 ## How to record a change

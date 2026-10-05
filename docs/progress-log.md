@@ -74,5 +74,8 @@ _(Add dates and screenshots for these if you have them.)_
 - Pi has port 111 (rpcbind) open -> not needed, to disable as hardening
 **Evidence:**
 - docs/images/week3-testing/T1-run1-*.png/.jpg, T1-runs2-5-*.png/.jpg
+- Found false positive 2233001 (RFB/VNC anomaly) from the admin's own RealVNC session -> suppressed for the admin laptop only (config/suricata/threshold.config)
+- Pi froze once (desktop/VNC hang); after reboot all 4 services came back automatically. Health: 49.6 °C, throttled=0x0 (power OK), RAM 1.6/7.6 GB, SD 34 % -> no hardware cause found
+- Enabled persistent journal (max 100 MB) so the cause of any future hang can be read after reboot
 **Next:** T2 stealth scans (XMAS / NULL / FIN), then T5 SSH brute force.
 **Hours:**
