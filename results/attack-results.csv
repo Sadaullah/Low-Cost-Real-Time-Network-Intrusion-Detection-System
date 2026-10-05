@@ -29,7 +29,7 @@ T6,FTP brute force,2,,,,,,
 T6,FTP brute force,3,,,,,,
 T6,FTP brute force,4,,,,,,
 T6,FTP brute force,5,,,,,,
-T7,SYN flood,1,,,,,,
+T7,SYN flood,1,2026-10-05 22:36:00,yes,1000008(SYN flood);1000001;9000002-4,15.26,yes,"sudo timeout 10 hping3 -S --flood -p 80 from Kali 192.168.10.20; 406486 SYN packets in 10 s; detected by tuned rule 1000008, 1 alert per 2 s window; also scan rules (flood looks like a scan); emailed"
 T7,SYN flood,2,,,,,,
 T7,SYN flood,3,,,,,,
 T7,SYN flood,4,,,,,,
