@@ -1,9 +1,9 @@
 test_id,attack,run,date_time,detected_yes_no,rule_sid,alert_delay_seconds,telegram_received_yes_no,notes
-T1,TCP SYN port scan,1,2026-10-05 17:59:53,yes,1000001;9000002;9000003;9000004 (+1000008),see DB query,yes,"nmap -sS -p 1-1000 192.168.10.50 from laptop 192.168.10.1; 1000 ports in 1.52 s; SYN-flood rule 1000008 also fired (scan/flood overlap); team rules 9000002-4 alerted per packet (alert flood)"
-T1,TCP SYN port scan,2,,,,,,
-T1,TCP SYN port scan,3,,,,,,
-T1,TCP SYN port scan,4,,,,,,
-T1,TCP SYN port scan,5,,,,,,
+T1,TCP SYN port scan,1,2026-10-05 17:59:53,yes,1000001;9000002;9000003;9000004 (+1000008),n/a,yes,"before tuning; nmap -sS -p 1-1000 192.168.10.50 from laptop 192.168.10.1; 1000 ports in 1.52 s; SYN-flood rule 1000008 also fired (scan/flood overlap); team rules 9000002-4 alerted per packet (alert flood)"
+T1,TCP SYN port scan,2,2026-10-05 18:35:14,yes,1000001;9000002;9000003;9000004,8.43,yes,"after tuning (rules rev 2); nmap start 18:35:11, first alert 18:35:14; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=18.52 9000002=8.43 9000003=12.45 9000004=15.39"
+T1,TCP SYN port scan,3,2026-10-05 18:36:25,yes,1000001;9000002;9000003;9000004,2.95,yes,"after tuning (rules rev 2); nmap start 18:36:23, first alert 18:36:25; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=12.39 9000002=2.95 9000003=6.24 9000004=9.22"
+T1,TCP SYN port scan,4,2026-10-05 18:37:36,yes,1000001;9000002;9000003;9000004,3.03,yes,"after tuning (rules rev 2); nmap start 18:37:34, first alert 18:37:36; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=11.57 9000002=3.03 9000003=6.14 9000004=8.89"
+T1,TCP SYN port scan,5,2026-10-05 18:38:48,yes,1000001;9000002;9000003;9000004,3.04,yes,"after tuning (rules rev 2); nmap start 18:38:46, first alert 18:38:48; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=11.80 9000002=3.04 9000003=5.70 9000004=9.08"
 T2,Stealth scans (XMAS/NULL/FIN),1,,,,,,
 T2,Stealth scans (XMAS/NULL/FIN),2,,,,,,
 T2,Stealth scans (XMAS/NULL/FIN),3,,,,,,

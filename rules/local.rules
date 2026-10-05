@@ -22,7 +22,7 @@ alert tcp any any -> $HOME_NET any (msg:"FYP-IDS SCAN Nmap FIN scan (FIN without
 alert icmp any any -> $HOME_NET any (msg:"FYP-IDS DOS Possible ICMP flood"; itype:8; threshold:type both, track by_dst, count 200, seconds 2; classtype:attempted-dos; sid:1000005; rev:1;)
 
 # T7: SYN flood - more than 500 SYNs to one host in 2 s
-alert tcp any any -> $HOME_NET any (msg:"FYP-IDS DOS Possible TCP SYN flood"; flow:stateless; flags:S,12; threshold:type both, track by_dst, count 500, seconds 2; classtype:attempted-dos; sid:1000008; rev:1;)
+alert tcp any any -> $HOME_NET any (msg:"FYP-IDS DOS Possible TCP SYN flood"; flow:stateless; flags:S,12; threshold:type both, track by_dst, count 2000, seconds 2; classtype:attempted-dos; sid:1000008; rev:2;)
 
 # ---------- Brute force ------------------------------------------------
 

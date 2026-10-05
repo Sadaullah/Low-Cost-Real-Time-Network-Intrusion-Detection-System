@@ -56,5 +56,23 @@ _(Add dates and screenshots for these if you have them.)_
 **Evidence:**
 - docs/images/week1-setup/01-first-live-alert-email.jpg
 - docs/images/week1-setup/02-dashboard-first-live-alerts.png
-**Next:** Install Nmap on laptop, run test T1 (SYN scan) and record results in results/attack-results.csv.
+**Next:** see Day 1 (evening).
+
+## Day 1 (evening) – 2026-10-05
+
+**Goal:** Run test T1 (TCP SYN port scan) 5 times, tune problems found.
+**Done:**
+- Installed Nmap 7.80 on the laptop (attacker 192.168.10.1, cable side)
+- T1 run 1 (17:59): detected by 1000001, 9000002, 9000003, 9000004; e-mails received
+- Tuned 9000002-9000005 (type threshold -> type both) and 1000008 (500 -> 2000 SYNs / 2 s)
+- T1 runs 2-5 (18:35-18:38): 4/4 detected, 1 alert per rule per scan, no false SYN-flood alert
+- T1 result: 5/5 runs detected = 100 % detection rate; detection 2-3 s after Nmap start; first e-mail 2.9-8.4 s after the alert
+**Problems & fixes:**
+- Alert flood from team rules (dozens of identical rows per scan) -> `type both`
+- Port scan also reported as SYN flood (scan/flood overlap) -> raised flood threshold
+- Later e-mails in a burst are slower (about +3 s each: 3, 6, 9, 12 s) because the collector sends e-mails one by one over SMTP -> possible improvement: one SMTP connection / one summary e-mail per burst
+- Pi has port 111 (rpcbind) open -> not needed, to disable as hardening
+**Evidence:**
+- docs/images/week3-testing/T1-run1-*.png/.jpg, T1-runs2-5-*.png/.jpg
+**Next:** T2 stealth scans (XMAS / NULL / FIN), then T5 SSH brute force.
 **Hours:**
