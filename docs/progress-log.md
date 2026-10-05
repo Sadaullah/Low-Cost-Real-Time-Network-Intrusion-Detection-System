@@ -77,5 +77,21 @@ _(Add dates and screenshots for these if you have them.)_
 - Found false positive 2233001 (RFB/VNC anomaly) from the admin's own RealVNC session -> suppressed for the admin laptop only (config/suricata/threshold.config)
 - Pi froze once (desktop/VNC hang); after reboot all 4 services came back automatically. Health: 49.6 °C, throttled=0x0 (power OK), RAM 1.6/7.6 GB, SD 34 % -> no hardware cause found
 - Enabled persistent journal (max 100 MB) so the cause of any future hang can be read after reboot
-**Next:** T2 stealth scans (XMAS / NULL / FIN), then T5 SSH brute force.
+**Next:** see Day 1 (night).
+
+## Day 1 (night) - 2026-10-05
+
+**Goal:** Set up Kali as the dedicated attacker, run T2 (stealth scans).
+**Done:**
+- Built Kali VM in VirtualBox: Adapter 1 bridged to the Ethernet (lab, eth0 = 192.168.10.20), Adapter 2 NAT (internet); ipv4.never-default on eth0 so lab and internet stay separate (same design as the Pi)
+- Installed attacker tools on Kali: nmap, hping3, hydra, nikto, sqlmap
+- Attacker is now Kali 192.168.10.20 (clearly separate from the admin laptop 192.168.10.1)
+- T2 (XMAS -sX, NULL -sN, FIN -sF), 5 runs each = 15 scans: 15/15 detected = 100 %
+  - XMAS -> 1000002, NULL -> 1000003, FIN -> 1000004; 1 alert per run; all emailed; avg delay ~3.1 s
+- Upgraded the e-mail alert to a professional HTML design (coloured severity banner, details table, footer); plain-text kept as fallback
+**Problems & fixes:**
+- Windows PowerShell mangled the scan-type variable (`-s$t`) -> switched all attacks to Kali (bash), which also gives a clean single attacker IP
+**Evidence:**
+- docs/images/week3-testing/T2-*.png
+**Next:** deploy HTML e-mail on the Pi; T3 aggressive scan; T5 SSH brute force.
 **Hours:**

@@ -4,11 +4,11 @@ T1,TCP SYN port scan,2,2026-10-05 18:35:14,yes,1000001;9000002;9000003;9000004,8
 T1,TCP SYN port scan,3,2026-10-05 18:36:25,yes,1000001;9000002;9000003;9000004,2.95,yes,"after tuning (rules rev 2); nmap start 18:36:23, first alert 18:36:25; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=12.39 9000002=2.95 9000003=6.24 9000004=9.22"
 T1,TCP SYN port scan,4,2026-10-05 18:37:36,yes,1000001;9000002;9000003;9000004,3.03,yes,"after tuning (rules rev 2); nmap start 18:37:34, first alert 18:37:36; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=11.57 9000002=3.03 9000003=6.14 9000004=8.89"
 T1,TCP SYN port scan,5,2026-10-05 18:38:48,yes,1000001;9000002;9000003;9000004,3.04,yes,"after tuning (rules rev 2); nmap start 18:38:46, first alert 18:38:48; 1 alert per rule; no 1000008; e-mail delays (s): 1000001=11.80 9000002=3.04 9000003=5.70 9000004=9.08"
-T2,Stealth scans (XMAS/NULL/FIN),1,,,,,,
-T2,Stealth scans (XMAS/NULL/FIN),2,,,,,,
-T2,Stealth scans (XMAS/NULL/FIN),3,,,,,,
-T2,Stealth scans (XMAS/NULL/FIN),4,,,,,,
-T2,Stealth scans (XMAS/NULL/FIN),5,,,,,,
+T2,Stealth scans (XMAS/NULL/FIN),1,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 1/5 detected, 1 alert per run, emailed; XMAS 19:35 NULL 19:41 FIN 19:47 (Pi time)"
+T2,Stealth scans (XMAS/NULL/FIN),2,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 2/5 detected, 1 alert per run, emailed; XMAS 19:36 NULL 19:42 FIN 19:48 (Pi time)"
+T2,Stealth scans (XMAS/NULL/FIN),3,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 3/5 detected, 1 alert per run, emailed; XMAS 19:37 NULL 19:43 FIN 19:49 (Pi time)"
+T2,Stealth scans (XMAS/NULL/FIN),4,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 4/5 detected, 1 alert per run, emailed; XMAS 19:39 NULL 19:45 FIN 19:51 (Pi time)"
+T2,Stealth scans (XMAS/NULL/FIN),5,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 5/5 detected, 1 alert per run, emailed; XMAS 19:40 NULL 19:46 FIN 19:52 (Pi time)"
 T3,Aggressive scan + OS detection,1,,,,,,
 T3,Aggressive scan + OS detection,2,,,,,,
 T3,Aggressive scan + OS detection,3,,,,,,
