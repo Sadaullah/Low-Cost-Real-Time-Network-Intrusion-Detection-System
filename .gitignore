@@ -1,0 +1,39 @@
+# ---- SECRETS: never commit these ----
+config.env
+*.env
+!config/config.env.example
+*.key
+*.pem
+id_rsa*
+
+# ---- Runtime data (large / private) ----
+*.db
+*.db-wal
+*.db-shm
+*.pcap
+*.pcapng
+eve.json*
+fast.log*
+*.log
+
+# ---- Python ----
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# ---- OS / editor junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+~$*
+
+# ---- Big files: keep videos/SD images out of git ----
+*.img
+*.iso
+*.zip
+*.mp4
+*.mkv
