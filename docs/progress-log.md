@@ -93,5 +93,11 @@ _(Add dates and screenshots for these if you have them.)_
 - Windows PowerShell mangled the scan-type variable (`-s$t`) -> switched all attacks to Kali (bash), which also gives a clean single attacker IP
 **Evidence:**
 - docs/images/week3-testing/T2-*.png
-**Next:** deploy HTML e-mail on the Pi; T3 aggressive scan; T5 SSH brute force.
+- Deployed the professional HTML e-mail on the Pi (red HIGH / amber MEDIUM / blue LOW banner); confirmed on phone
+- T3 (aggressive scan, `nmap -A`) from Kali: detected 1/1; triggered 1000006 (SSH version probe looked like brute force), 2100598 (RPC portmap listing), 2200025 (ICMPv4 unknown code / OS fingerprint)
+- T3 also fingerprinted the Pi: OpenSSH 10.0p2 Debian, rpcbind 2-4 on port 111 -> confirms port 111 should be closed as hardening
+**Evidence:**
+- docs/images/week3-testing/T3-nmap-aggressive-scan.png
+- docs/images/week3-testing/email-high-ssh-bruteforce.jpg, email-medium-rpc.jpg, email-low-icmp.jpg
+**Next:** T4 ICMP flood (hping3), T5 SSH brute force (hydra).
 **Hours:**

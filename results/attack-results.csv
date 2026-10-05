@@ -9,7 +9,7 @@ T2,Stealth scans (XMAS/NULL/FIN),2,2026-10-05,yes,1000002(XMAS);1000003(NULL);10
 T2,Stealth scans (XMAS/NULL/FIN),3,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 3/5 detected, 1 alert per run, emailed; XMAS 19:37 NULL 19:43 FIN 19:49 (Pi time)"
 T2,Stealth scans (XMAS/NULL/FIN),4,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 4/5 detected, 1 alert per run, emailed; XMAS 19:39 NULL 19:45 FIN 19:51 (Pi time)"
 T2,Stealth scans (XMAS/NULL/FIN),5,2026-10-05,yes,1000002(XMAS);1000003(NULL);1000004(FIN),~3.1,yes,"attacker Kali 192.168.10.20; each scan type run 5/5 detected, 1 alert per run, emailed; XMAS 19:40 NULL 19:46 FIN 19:52 (Pi time)"
-T3,Aggressive scan + OS detection,1,,,,,,
+T3,Aggressive scan + OS detection,1,2026-10-05 20:12,yes,1000006(SSH);2100598(RPC portmap);2200025(ICMP unknown);GPL RPC,n/a,yes,"sudo nmap -A from Kali 192.168.10.20; 18.76 s; found OpenSSH 10.0p2 Debian + rpcbind 2-4 on 111; version/OS probes triggered SSH-bruteforce, RPC and ICMP-anomaly rules"
 T3,Aggressive scan + OS detection,2,,,,,,
 T3,Aggressive scan + OS detection,3,,,,,,
 T3,Aggressive scan + OS detection,4,,,,,,
