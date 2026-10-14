@@ -8,7 +8,7 @@ The full live file is saved by `scripts/backup_configs.sh` into `config/snapshot
 | `vars.address-groups.HOME_NET` | `[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]` | `[192.168.1.0/24]` | Only the lab network is protected |
 | `vars.address-groups.EXTERNAL_NET` | `!$HOME_NET` | `any` | Attacker is on the same LAN in the lab; with `!$HOME_NET` most ET rules would never fire |
 | `af-packet[0].interface` | `eth0` | `eth0` (week 1) → `br0` (week 2+) | Listen on the bridge to see all traffic |
-| `rule-files` | `suricata.rules` | + `/etc/suricata/rules/local.rules` | Load my custom rules |
+| `rule-files` | `suricata.rules` | `local.rules` (team rules) + `/etc/suricata/rules/local.rules`; `suricata.rules` (ET Open) commented out on 2026-10-14 | Final system runs only the 18 custom rules (see docs/rule-tuning-log.md) |
 | `outputs.eve-log.community-id` | `false` | `true` | Flow ID that matches Zeek/Wireshark for correlation |
 
 ```yaml
@@ -25,6 +25,7 @@ af-packet:
 
 default-rule-path: /var/lib/suricata/rules
 rule-files:
-  - suricata.rules
-  - /etc/suricata/rules/local.rules
+  #- suricata.rules            # ET Open, disabled 2026-10-14
+  - local.rules                # team rules 9000001-9000005
+  - /etc/suricata/rules/local.rules   # FYP-IDS rules 1000001-1000013
 ```

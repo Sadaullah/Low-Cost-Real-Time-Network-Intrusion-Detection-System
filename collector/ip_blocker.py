@@ -38,6 +38,7 @@ from datetime import datetime
 
 CONFIG_FILE = os.environ.get("FYP_IDS_CONFIG", "/etc/fyp-ids/config.env")
 CHAIN = "FYP-BLOCK"
+REVERSED_SIDS = {1000007}   # rules where the attacker is dest_ip (server reply)
 log = logging.getLogger("ip-blocker")
 
 
@@ -53,7 +54,7 @@ def load_config(path):
         "BLOCK_DURATION_SEC": "600",      # ban length (10 min), then auto-unban
         "BLOCK_MIN_SEVERITY": "2",        # only act on severity <= this (1 high, 2 med)
         # never ban these (comma-separated IPs / CIDRs):
-        "BLOCK_WHITELIST": "127.0.0.1,192.168.1.0/24,192.168.10.1",
+        "BLOCK_WHITELIST": "127.0.0.1,192.168.1.0/24,192.168.10.1,192.168.10.50",
         "BLOCK_DRY_RUN": "0",             # 1 = log what it WOULD block, no iptables
     }
     if os.path.exists(path):
@@ -274,7 +275,9 @@ def main():
         if ev.get("event_type") != "alert":
             continue
         a = ev.get("alert", {})
-        blocker.record(ev.get("src_ip"), a.get("severity", 3),
+        attacker = (ev.get("dest_ip") if a.get("signature_id") in REVERSED_SIDS
+                    else ev.get("src_ip"))
+        blocker.record(attacker, a.get("severity", 3),
                        a.get("signature", ""))
 
     log.info("stopping; leaving active bans in place (they will expire)")

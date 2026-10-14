@@ -138,20 +138,27 @@ class Notifier(threading.Thread):
             log.warning("notification queue full, dropping message")
 
     def run(self):
+        # several workers send in parallel, so a burst of alerts does not
+        # queue behind one slow SMTP login
+        from concurrent.futures import ThreadPoolExecutor
+        pool = ThreadPoolExecutor(max_workers=4)
         while True:
             row_id, ev = self.q.get()
-            text = self.format(ev)
-            ok = False
-            if self.telegram:
-                ok |= self.send_telegram(text)
-            if self.email:
-                ok |= self.send_email(ev, text)
-            if ok:
-                delay = time.time() - parse_ts(ev.get("timestamp"))
-                with self.db_lock:
-                    self.db.execute("UPDATE alerts SET notified=1, notify_delay=? WHERE id=?",
-                                    (round(delay, 3), row_id))
-                log.info("notified sid=%s delay=%.2fs", ev["alert"]["signature_id"], delay)
+            pool.submit(self.deliver, row_id, ev)
+
+    def deliver(self, row_id, ev):
+        text = self.format(ev)
+        ok = False
+        if self.telegram:
+            ok |= self.send_telegram(text)
+        if self.email:
+            ok |= self.send_email(ev, text)
+        if ok:
+            delay = time.time() - parse_ts(ev.get("timestamp"))
+            with self.db_lock:
+                self.db.execute("UPDATE alerts SET notified=1, notify_delay=? WHERE id=?",
+                                (round(delay, 3), row_id))
+            log.info("notified sid=%s delay=%.2fs", ev["alert"]["signature_id"], delay)
 
     SEV_NAME = {1: "HIGH", 2: "MEDIUM", 3: "LOW"}
     SEV_COLOR = {1: "#d93025", 2: "#f29900", 3: "#1a73e8"}  # red / amber / blue
@@ -284,6 +291,19 @@ def follow(path, stop):
 
 
 # ---------------------------------------------------------------------- main
+# Rules that match the SERVER's reply (e.g. FTP "530 login failed"), so
+# Suricata's src_ip is the victim. For these we swap src/dest so the
+# attacker is always shown, notified and stored as the source.
+REVERSED_SIDS = {1000007}
+
+
+def normalize(ev):
+    if ev.get("alert", {}).get("signature_id") in REVERSED_SIDS:
+        ev["src_ip"], ev["dest_ip"] = ev.get("dest_ip"), ev.get("src_ip")
+        ev["src_port"], ev["dest_port"] = ev.get("dest_port"), ev.get("src_port")
+    return ev
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = load_config(CONFIG_FILE)
@@ -306,6 +326,7 @@ def main():
             continue
         etype = ev.get("event_type")
         if etype == "alert":
+            normalize(ev)
             a = ev["alert"]
             with db_lock:
                 cur = db.execute(
