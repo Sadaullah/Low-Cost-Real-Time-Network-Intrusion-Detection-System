@@ -51,12 +51,12 @@ after repeated alerts. Details: [docs/ips-mode.md](docs/ips-mode.md).
 
 ## Project status
 
-| Week | Dates | Goal | Status |
+| Phase | Dates | Goal | Status |
 | --- | --- | --- | --- |
-| 1 | 5–11 Oct 2026 | Suricata running, ET rules loaded, first detection | ✅ Done |
-| 2 | 12–18 Oct 2026 | Traffic capture, custom rules, alerts | ✅ Done |
-| 3 | 19–25 Oct 2026 | Dashboard, 9 attack tests, performance tests | ✅ Done |
-| 4 | 26 Oct–1 Nov 2026 | Prevention (IPS + auto-block), results, report, presentation | ✅ Done |
+| 1 | 1–31 Aug 2026 | Suricata running, ET rules loaded, first detection | ✅ Done |
+| 2 | 1–20 Sep 2026 | Traffic capture, custom rules, alerts | ✅ Done |
+| 3 | 21 Sep–5 Oct 2026 | Dashboard, 9 attack tests, performance tests | ✅ Done |
+| 4 | 6–15 Oct 2026 | Prevention (IPS + auto-block), results, report, presentation | ✅ Done |
 
 Daily work: [docs/progress-log.md](docs/progress-log.md)
 
