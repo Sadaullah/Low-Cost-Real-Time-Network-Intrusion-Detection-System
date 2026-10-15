@@ -123,3 +123,25 @@ _(Add dates and screenshots for these if you have them.)_
 - docs/images/week4-results/fig_performance.png (after running the 3 benchmark scenarios)
 **Next:** deploy on the Pi, capture IPS/auto-block/performance evidence, update Chapter 6 (future work -> implemented).
 **Hours:**
+
+## Day 3 – 2026-10-14  (who: Sada)
+
+**Goal:** Final tuning – run the IDS with the team's own rules only and close remaining issues.
+**Done:**
+- Disabled ET rule 2003068 (labelled lab scans as OUTBOUND), then removed the whole ET Open ruleset from `rule-files` in suricata.yaml -> 18 rules loaded, 0 failed
+- Fixed attacker direction for FTP rule 1000007 (alert is on the server's 530 reply): `ids_collector.py` and `ip_blocker.py` now swap src/dest for this SID; added the sensor IP 192.168.10.50 to BLOCK_WHITELIST
+- Notifications now sent by 4 parallel workers: e-mail delay ~3 s per alert during scans (was climbing to ~15 s)
+- Disabled rpcbind (port 111) on the Pi – unused service
+- Auto-block confirmed: Kali 192.168.10.20 BLOCKED 14:26:02 (5 alerts in 30 s), UNBLOCKED 14:36:04
+- Additional tests: UDP scan -> 9000005, Telnet connection -> 1000012, spoofed-source ICMP/SYN floods -> 1000005 / 1000008
+- DDoS test exposed an alert storm (~85,000 alerts from 9000001 tracking by source); changed 9000001 to `track by_dst` (rev 3) -> same attack gives 6 alerts
+**Evidence:** tests/evidence/2026-10-14_*.png
+**Next:** re-test T5 with ET disabled; update report.
+
+## Day 4 – 2026-10-15  (who: Sada)
+
+**Goal:** Confirm T5 with custom rules only.
+**Done:**
+- hydra SSH brute force (100 passwords, -t 4) detected by custom rule 1000006 (HIGH, e-mail 3.9 s) -> all 9 tests and all 18 rules confirmed with the final build
+- Report updated to match the final system (18 custom rules, figures, test results)
+**Evidence:** tests/evidence/2026-10-15_T5-ssh-bruteforce_1000006.png

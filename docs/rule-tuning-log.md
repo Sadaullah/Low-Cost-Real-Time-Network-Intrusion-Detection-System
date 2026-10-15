@@ -18,6 +18,7 @@ threshold) is recorded here. This table goes straight into Chapter 5
 | 2026-10-14 | 9000001 | rev 2 `threshold limit 1/60s track by_src` -> rev 3 `track by_dst` | DDoS test (`hping3 -1 --flood --rand-source`): every spoofed source counted as new, giving ~85,000 alerts and 85,000 "unique attackers" | Same 10 s DDoS now gives 6 alerts (1 x 9000001, 5 x 1000005 ICMP flood) |
 | 2026-10-14 | 1000007 (FTP brute force) + collector | `ids_collector.py` / `ip_blocker.py`: swap src/dest for server-reply rules (REVERSED_SIDS = {1000007}); sensor IP 192.168.10.50 added to BLOCK_WHITELIST | Rule matches the server's 530 reply, so the Pi was shown (and counted for blocking) as the attacker | Kali 192.168.10.20 shown as attacker; auto-block banned Kali at 14:26:02, auto-unblocked 14:36:04 |
 | 2026-10-14 | collector e-mail queue | Notifications sent by 4 parallel workers instead of one at a time (resolves the 2026-10-05 note above) | During scans e-mail delay climbed 3 -> 15 s because each SMTP login waited for the previous one | Notification delay ~3 s per alert during scans |
+| 2026-10-15 | 1000006 (SSH brute force) | No change; re-tested with ET Open disabled | hydra -l testuser, 100 passwords, -t 4 | Custom rule detected T5 (HIGH, e-mail 3.9 s); ET rule no longer needed |
 | | | | | |
 
 ## How to record a change

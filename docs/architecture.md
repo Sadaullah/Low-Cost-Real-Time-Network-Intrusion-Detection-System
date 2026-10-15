@@ -62,10 +62,11 @@ This option also allows a later IPS mode (blocking), listed as future work.
 ## Software pipeline on the Pi
 
 ```
-packets -> Suricata (ET Open 50,184 rules + 13 custom rules)
+packets -> Suricata (18 custom rules; ET Open evaluated during development, disabled in final build)
         -> /var/log/suricata/eve.json
         -> collector (Python service) -> SQLite -> Flask dashboard :8080
                                       -> Telegram / e-mail alert
+        -> ip_blocker.py (reads eve.json) -> iptables auto-block (5 alerts / 30 s, 10-min ban)
 ```
 
 ## Addressing (lab)
@@ -79,4 +80,7 @@ packets -> Suricata (ET Open 50,184 rules + 13 custom rules)
 
 ## Status
 
-Architecture design: In Progress — monitoring option to be confirmed (A or B).
+Architecture design: final. In the final lab tests the Pi itself was the target host:
+Kali `192.168.10.20` attacked the Pi `192.168.10.50` (eth0) on the `192.168.10.0/24` lab subnet,
+with management over Wi-Fi (`wlan0`). Options A and B above remain the deployment paths for
+monitoring other hosts (listed as future work in the report).

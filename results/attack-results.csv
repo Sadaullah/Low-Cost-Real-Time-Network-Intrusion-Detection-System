@@ -44,3 +44,9 @@ T9,EICAR malware download,2,,,,,,
 T9,EICAR malware download,3,,,,,,
 T9,EICAR malware download,4,,,,,,
 T9,EICAR malware download,5,,,,,,
+T3,Aggressive scan + OS detection,final,2026-10-14 13:45,yes,1000001;1000003;1000006;1000007;9000001-9000004,~3,yes,"final build (18 custom rules, ET disabled); nmap -A 192.168.10.50 from Kali 192.168.10.20"
+T5,SSH brute force,final,2026-10-15 23:32:34,yes,1000006,3.861,yes,"final build (ET disabled); hydra -l testuser -P 100 passwords -t 4 ssh://192.168.10.50"
+U1,UDP port scan,1,2026-10-14 15:14:31,yes,9000005,3.328,yes,"additional test; sudo nmap -sU --top-ports 20 192.168.10.50"
+P1,Telnet policy violation,1,2026-10-14 15:25:17,yes,1000012,4.321,yes,"additional test; real TCP connection to port 23 (temporary listener on Pi); nc from Kali"
+D1,Distributed ICMP flood (spoofed sources),1,2026-10-14 15:51:37,yes,1000005;9000001,n/a,n/a,"additional test; sudo timeout 10 hping3 -1 --flood --rand-source; 334587 packets -> 6 alerts after 9000001 rev 3 (track by_dst)"
+D2,Distributed SYN flood (spoofed sources),1,2026-10-14,yes,1000008,n/a,n/a,"additional test; sudo timeout 10 hping3 -S -p 80 --flood --rand-source; 507270 packets; detected (5 alerts); per-IP blocking cannot stop spoofed DDoS"

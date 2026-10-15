@@ -9,7 +9,11 @@ with an optional prevention (IPS) layer. BS Cyber Security Final Year Project.
 - Detects SYN scans, port scans, and service scans
 - Detects stealth scans (XMAS / NULL / FIN), ICMP and SYN floods, SSH and FTP brute force,
   SQL injection, XSS and malware downloads (EICAR test file)
-- 50,184 Suricata ET detection rules loaded, plus 13 custom rules ([rules/local.rules](rules/local.rules))
+- 18 custom detection rules: 13 FYP-IDS rules ([rules/local.rules](rules/local.rules), SIDs 1000001–1000013) + 5 team rules
+  ([rules/team-rules-v2.rules](rules/team-rules-v2.rules), SIDs 9000001–9000005). The ET Open ruleset (50,184 rules) was
+  evaluated during development and is **disabled in the final build** (see [docs/rule-tuning-log.md](docs/rule-tuning-log.md))
+- Validated against 9 attack types (T1–T9, 100% detected) plus UDP scan, Telnet policy violation and spoofed-source
+  DDoS floods — all 18 rules triggered at least once
 - **Prevention (IPS):** inline NFQUEUE mode drops attacks in real time
   ([rules/ips.rules](rules/ips.rules), [scripts/ips_mode.sh](scripts/ips_mode.sh)) — see [docs/ips-mode.md](docs/ips-mode.md)
 - **Active response:** auto-blocks attacker IPs with iptables after repeated alerts
@@ -34,9 +38,9 @@ Dr. Muhammad Mansoor Alam
 ## Architecture
 
 ```
-Kali attacker -> Router -> Raspberry Pi 4 (Suricata sensor) -> Victim PC
+Kali attacker 192.168.10.20 -> lab subnet 192.168.10.0/24 -> Raspberry Pi 4 192.168.10.50 (Suricata sensor + target)
                                    |
-   Suricata (ET Open + local.rules) -> eve.json -> Collector -> SQLite -> Dashboard :8080
+   Suricata (18 custom rules)       -> eve.json -> Collector -> SQLite -> Dashboard :8080
                                                           \-> e-mail alert
                                                           \-> ip_blocker -> iptables (auto-block)
 ```
@@ -52,7 +56,7 @@ after repeated alerts. Details: [docs/ips-mode.md](docs/ips-mode.md).
 | 1 | 5–11 Oct 2026 | Suricata running, ET rules loaded, first detection | ✅ Done |
 | 2 | 12–18 Oct 2026 | Traffic capture, custom rules, alerts | ✅ Done |
 | 3 | 19–25 Oct 2026 | Dashboard, 9 attack tests, performance tests | ✅ Done |
-| 4 | 26 Oct–1 Nov 2026 | Prevention (IPS + auto-block), results, report, presentation | ⏳ In progress |
+| 4 | 26 Oct–1 Nov 2026 | Prevention (IPS + auto-block), results, report, presentation | ✅ Done |
 
 Daily work: [docs/progress-log.md](docs/progress-log.md)
 
@@ -61,7 +65,8 @@ Daily work: [docs/progress-log.md](docs/progress-log.md)
 ```
 ├── README.md
 ├── rules/
-│   ├── local.rules            custom detection (alert) rules
+│   ├── local.rules            custom detection (alert) rules, SIDs 1000001-1000013
+│   ├── team-rules-v2.rules    team rules, SIDs 9000001-9000005
 │   └── ips.rules              prevention (drop) rules for inline IPS mode
 ├── collector/
 │   ├── ids_collector.py       eve.json -> SQLite + e-mail alerts
@@ -75,7 +80,7 @@ Daily work: [docs/progress-log.md](docs/progress-log.md)
 │   ├── perf_benchmark.sh      measure CPU/RAM/temp/drop per scenario
 │   ├── perf_report.py         build the performance table + chart
 │   └── ...                    setup, bridge, config backup, tests
-├── tests/evidence/            alert log extracts per test run
+├── tests/evidence/            screenshots and alert extracts per test run
 ├── results/                   attack and performance results (CSV)
 ├── docs/
 │   ├── architecture.md        network architecture
@@ -88,7 +93,7 @@ Daily work: [docs/progress-log.md](docs/progress-log.md)
 │   ├── rule-tuning-log.md     every rule change and why
 │   ├── troubleshooting.md     errors and fixes
 │   └── images/                screenshots by week
-└── report/                    report chapters and slides
+└── report/                    final project report (.docx) and slides
 ```
 
 ## Quick start

@@ -68,7 +68,7 @@ Reconnect: `ssh youruser@192.168.1.50`.
 ## Stage 7 – Rules and first detection
 
 ```bash
-sudo suricata-update
+sudo suricata-update   # optional: downloads ET Open (used during development only; not loaded in the final build)
 sudo mkdir -p /etc/suricata/rules && sudo cp rules/local.rules /etc/suricata/rules/
 sudo suricata -T -c /etc/suricata/suricata.yaml -v
 sudo systemctl enable --now suricata && sudo systemctl restart suricata
